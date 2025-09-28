@@ -39,11 +39,12 @@ jobs:
                  echo "changed=false" >> $GITHUB_OUTPUT
               fi
 
-         - name: Commit changes
+         - name: Pull latest changes and amend commit
            if: steps.verify-changed-files.outputs.changed == 'true'
            run: |
               git config --local user.email "arsenis_sto@yahoo.gr"
               git config --local user.name "arisstogiannos"
-              git add ./src 
-              git commit --amend --no-edit  
-              git push --force-with-lease
+              git pull origin main
+              git add .
+              git commit --amend --no-edit
+              git push --force-with-lease origin main
