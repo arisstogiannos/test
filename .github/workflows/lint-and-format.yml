@@ -39,12 +39,15 @@ jobs:
                  echo "changed=false" >> $GITHUB_OUTPUT
               fi
 
-         - name: Pull latest changes and amend commit
+         - name: Commit formatted code
            if: steps.verify-changed-files.outputs.changed == 'true'
            run: |
-              git config --local user.email "arsenis_sto@yahoo.gr"
-              git config --local user.name "arisstogiannos"
-              git pull origin main
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
               git add .
-              git commit --amend --no-edit
-              git push --force-with-lease origin main
+              if git diff --cached --quiet; then
+                 echo "No changes to commit"
+              else
+                 git commit -m "chore: format code"
+                 git push
+              fi
